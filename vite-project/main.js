@@ -20,14 +20,23 @@ const startGame = () => {
     const boardInformation = document.querySelector("#board-information");
     boardInformation.classList.replace("hidden", "block")
 
+    let cellArray = []
+    // const randomCell = Math.floor(Math.random() * i)
     // creating a grid board for the game
     const createEasyBoard = () => {
       for (let i = 0; i < 256; i++) {
         const cell = document.createElement("div");
         cell.className =
-          "border border-red-500";
+          "border border-white";
         easyBoardContainer.appendChild(cell);
+        cellArray.push(cell)
+        // This will help us create a unique id for each individual cell
+        cell.id = `cell-${i}`
       }
+      let randomIndex = Math.floor(Math.random() * cellArray.length)
+      // This would identify our starting game
+      let randomCell = cellArray[randomIndex]
+      randomCell.classList.add("bg-green-500")
     };
 
     createEasyBoard();
