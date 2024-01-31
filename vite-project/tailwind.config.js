@@ -2,7 +2,21 @@
 export default {
   content: ["./*.{html,js}"],
   theme: {
-    extend: {},
+    extend: {
+      gridTemplateRows: {
+        // Simple 16 row grid
+        '16-row': 'repeat(16, 1fr)'
+      },
+      gridTemplateColumns: {
+        '16-col': 'repeat(16, 1fr)'
+      },
+      width: {
+        '600-w': '600px'
+      },
+      height: {
+        '600-h': '600px'
+      }
+    },
   },
   plugins: [],
 }
