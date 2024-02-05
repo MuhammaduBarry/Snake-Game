@@ -26,7 +26,11 @@ const gameBoard = () => {
     let cellArray = [];
     let playerGreenCell;
     let randomRedCell;
-
+    let randomGreenIndex;
+    let randomRedIndex;
+    // colors
+    const snakeColor = "bg-snake-green"
+    const foodColor = "bg-red-600"
     const createGrid = () => {
         removeStart();
         for (let i = 0; i < 256; i++) {
@@ -38,42 +42,99 @@ const gameBoard = () => {
             cell.id = `cell-${i}`;
         }
         // This would allow us to have our green starting point
-        let randomGreenIndex = Math.floor(Math.random() * cellArray.length);
+        randomGreenIndex = Math.floor(Math.random() * cellArray.length);
         playerGreenCell = cellArray[randomGreenIndex];
-        playerGreenCell.classList.add("bg-green-600");
+        playerGreenCell.classList.add(snakeColor);
 
         // This would allow us to have our red starting point
-        let randomRedIndex = Math.floor(Math.random() * cellArray.length);
+        randomRedIndex = Math.floor(Math.random() * cellArray.length);
         randomRedCell = cellArray[randomRedIndex];
-        randomRedCell.classList.add("bg-red-600");
+        randomRedCell.classList.add(foodColor);
 
         // Incase if both random indexes land on the same one
         if (playerGreenCell === randomRedCell) {
-            randomRedCell.classList.remove("bg-red-600");
+            randomRedCell.classList.remove(foodColor);
 
             // this is just a precaution
             randomRedCell = cellArray[randomRedIndex + 1];
             playerGreenCell = cellArray[randomGreenIndex + 2];
 
             // this adds a new classlist value to our new cells
-            playerGreenCell.classList.add("bg-green-600");
-            randomRedCell.classList.add("bg-red-600");
+            playerGreenCell.classList.add(snakeColor);
+            randomRedCell.classList.add(foodColor);
         }
         trackMovement();
+    };
+    // this function will keep track of our cells
+    const trackMovement = () => {
+        document.addEventListener("keydown", (e) => {
+
+            switch (e.key) {
+                case "ArrowUp":
+                case "w":
+                case "W":
+                    try {
+                        // up arrow key moves the cell 16 spots
+                        playerGreenCell.classList.remove(snakeColor);
+                        //this allows us to save and update the index when the event happens
+                        playerGreenCell = cellArray[randomGreenIndex -= 16]; // randomGreenIndex = randomGreenIndex - 16
+                        playerGreenCell.classList.add(snakeColor);
+                    } catch (e) {
+                        if (e instanceof TypeError) {
+                            alert("i think this is going to work")
+                        }
+                    }
+                    break;
+                case "ArrowDown":
+                case "s":
+                case "S":
+                    playerGreenCell.classList.remove(snakeColor);
+                    playerGreenCell = cellArray[randomGreenIndex += 16];
+                    playerGreenCell.classList.add(snakeColor);
+                    break;
+                case "ArrowRight":
+                case "a":
+                case "A":
+                    playerGreenCell.classList.remove(snakeColor);
+                    playerGreenCell = cellArray[randomGreenIndex += 1];
+                    playerGreenCell.classList.add(snakeColor);
+                    break;
+                case "ArrowLeft":
+                case "d":
+                case "D":
+                    playerGreenCell.classList.remove(snakeColor);
+                    playerGreenCell = cellArray[randomGreenIndex -= 1];
+                    playerGreenCell.classList.add(snakeColor);
+                    break;
+                default:
+                    console.log("not working")
+            }
+        });
     };
     //This allows us to create the game
     startButton.addEventListener("click", createGrid);
 };
-// this function will keep track of our cells
-const trackMovement = () => {
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "ArrowUp") {
-            console.log("working");
-        }
-    });
-    document.addEventListener("click", () => {
-        console.log("working")
-    })
-};
-
 gameBoard();
+let test100
+let isIntervalRunning = false
+
+function startInterval() {
+    test100 = setInterval(() => {
+        console.log("working")
+    }, 1000)
+    isIntervalRunning = true
+}
+
+function stopInterval() {
+    clearInterval(test100)
+    console.log("stopping worked")
+    isIntervalRunning = false
+}
+
+document.addEventListener("click", () => {
+    if (isIntervalRunning) {
+        stopInterval()
+    } else {
+        startInterval()
+    }
+})
