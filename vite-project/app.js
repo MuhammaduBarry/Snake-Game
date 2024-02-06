@@ -120,11 +120,9 @@ const gameBoard = () => {
             interval = setInterval(() => {
                 moveFunction(num)
             }, 300)
-            isIntervalRunning = true
         }
         const stopInterval = () => {
             clearInterval(interval)
-            isIntervalRunning = false
         }
         document.addEventListener("keydown", (e) => {
             switch (e.key) {
