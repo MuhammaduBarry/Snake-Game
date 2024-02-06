@@ -67,44 +67,85 @@ const gameBoard = () => {
     };
     // this function will keep track of our cells
     const trackMovement = () => {
+        let interval
+        const catchError = (e) => {
+            // cells that are places on the border
+            if (e instanceof TypeError) {
+                alert("i think this is going to work");
+            } else {
+                alert("not working")
+            }
+        }
+        let isIntervalRunning = false;
+        const movePlayerMinus = (num) => {
+            try {
+                // up arrow key moves the cell 16 spots
+                playerGreenCell.classList.remove(snakeColor);
+                //this allows us to save and update the index when the event happens
+                playerGreenCell = cellArray[randomGreenIndex -= num]; // randomGreenIndex = randomGreenIndex + 16
+                playerGreenCell.classList.add(snakeColor);
+            } catch (e) {
+                catchError(e)
+            }
+        }
+        const movePlayerPositive = (num) => {
+            try {
+                // up arrow key moves the cell 16 spots
+                playerGreenCell.classList.remove(snakeColor);
+                //this allows us to save and update the index when the event happens
+                playerGreenCell = cellArray[randomGreenIndex += num]; // randomGreenIndex = randomGreenIndex + 16
+                playerGreenCell.classList.add(snakeColor);
+            } catch (e) {
+                catchError(e)
+            }
+        }
+        const startInterval = (moveFunction, num) => {
+            interval = setInterval(() => {
+                moveFunction(num)
+            }, 1000)
+            isIntervalRunning = true
+        }
+        const stopInterval = () => {
+            clearInterval(interval)
+            isIntervalRunning = false
+        }
         document.addEventListener("keydown", (e) => {
-
             switch (e.key) {
                 case "ArrowUp":
                 case "w":
                 case "W":
-                    try {
-                        // up arrow key moves the cell 16 spots
-                        playerGreenCell.classList.remove(snakeColor);
-                        //this allows us to save and update the index when the event happens
-                        playerGreenCell = cellArray[randomGreenIndex -= 16]; // randomGreenIndex = randomGreenIndex - 16
-                        playerGreenCell.classList.add(snakeColor);
-                    } catch (e) {
-                        if (e instanceof TypeError) {
-                            alert("i think this is going to work")
-                        }
+                    if (isIntervalRunning) {
+                        stopInterval()
+                    } else {
+                        startInterval(movePlayerMinus, 16)
                     }
                     break;
                 case "ArrowDown":
                 case "s":
                 case "S":
-                    playerGreenCell.classList.remove(snakeColor);
-                    playerGreenCell = cellArray[randomGreenIndex += 16];
-                    playerGreenCell.classList.add(snakeColor);
+                    if (isIntervalRunning) {
+                        stopInterval()
+                    } else {
+                        startInterval(movePlayerPositive, 16)
+                    }
                     break;
                 case "ArrowRight":
                 case "a":
                 case "A":
-                    playerGreenCell.classList.remove(snakeColor);
-                    playerGreenCell = cellArray[randomGreenIndex += 1];
-                    playerGreenCell.classList.add(snakeColor);
+                    if (isIntervalRunning) {
+                        stopInterval()
+                    } else {
+                        startInterval(movePlayerPositive, 1)
+                    }
                     break;
                 case "ArrowLeft":
                 case "d":
                 case "D":
-                    playerGreenCell.classList.remove(snakeColor);
-                    playerGreenCell = cellArray[randomGreenIndex -= 1];
-                    playerGreenCell.classList.add(snakeColor);
+                    if (isIntervalRunning) {
+                        stopInterval()
+                    } else {
+                        startInterval(movePlayerMinus, 1)
+                    }
                     break;
                 default:
                     console.log("not working")
@@ -115,26 +156,3 @@ const gameBoard = () => {
     startButton.addEventListener("click", createGrid);
 };
 gameBoard();
-let test100
-let isIntervalRunning = false
-
-function startInterval() {
-    test100 = setInterval(() => {
-        console.log("working")
-    }, 1000)
-    isIntervalRunning = true
-}
-
-function stopInterval() {
-    clearInterval(test100)
-    console.log("stopping worked")
-    isIntervalRunning = false
-}
-
-document.addEventListener("click", () => {
-    if (isIntervalRunning) {
-        stopInterval()
-    } else {
-        startInterval()
-    }
-})
