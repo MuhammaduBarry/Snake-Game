@@ -68,6 +68,7 @@ const gameBoard = () => {
     // this function will keep track of our cells
     const trackMovement = () => {
         let interval
+        let lastKeyPressed = null;
         const catchError = (e) => {
             // cells that are places on the border
             if (e instanceof TypeError) {
@@ -77,6 +78,11 @@ const gameBoard = () => {
             }
         }
         let isIntervalRunning = false;
+        const checkSpecialCondition = () => {
+            if (playerGreenCell === cellArray[240]) {
+                alert("i am on to something");
+            }
+        };
         const movePlayerMinus = (num) => {
             try {
                 // up arrow key moves the cell 16 spots
@@ -84,6 +90,10 @@ const gameBoard = () => {
                 //this allows us to save and update the index when the event happens
                 playerGreenCell = cellArray[randomGreenIndex -= num]; // randomGreenIndex = randomGreenIndex + 16
                 playerGreenCell.classList.add(snakeColor);
+                // Check if the current position is the "wall"
+                if (lastKeyPressed === null && randomGreenIndex === 240) {
+                    alert("i am on to something");
+                }
             } catch (e) {
                 catchError(e)
             }
@@ -102,7 +112,7 @@ const gameBoard = () => {
         const startInterval = (moveFunction, num) => {
             interval = setInterval(() => {
                 moveFunction(num)
-            }, 1000)
+            }, 500)
             isIntervalRunning = true
         }
         const stopInterval = () => {
@@ -130,8 +140,8 @@ const gameBoard = () => {
                     }
                     break;
                 case "ArrowRight":
-                case "a":
-                case "A":
+                case "d":
+                case "D":
                     if (isIntervalRunning) {
                         stopInterval()
                     } else {
@@ -139,18 +149,22 @@ const gameBoard = () => {
                     }
                     break;
                 case "ArrowLeft":
-                case "d":
-                case "D":
+                case "a":
+                case "A":
                     if (isIntervalRunning) {
                         stopInterval()
+
                     } else {
                         startInterval(movePlayerMinus, 1)
                     }
+
                     break;
                 default:
                     console.log("not working")
             }
         });
+
+
     };
     //This allows us to create the game
     startButton.addEventListener("click", createGrid);
