@@ -2,7 +2,7 @@ import "./style.css";
 
 // Creating the game board
 const gameBoard = () => {
-    // Queryselectors
+    // querySelectors
     const startButton = document.querySelector("#start-button");
     const h1Element = document.querySelector("#start-text");
     const startButtonContainer = document.querySelector(
@@ -68,51 +68,58 @@ const gameBoard = () => {
     // this function will keep track of our cells
     const trackMovement = () => {
         let interval
-        let lastKeyPressed = null;
         const catchError = (e) => {
             // cells that are places on the border
             if (e instanceof TypeError) {
-                alert("i think this is going to work");
+                location.reload()
             } else {
-                alert("not working")
+                location.reload()
             }
         }
         let isIntervalRunning = false;
-        const checkSpecialCondition = () => {
-            if (playerGreenCell === cellArray[240]) {
-                alert("i am on to something");
-            }
-        };
         const movePlayerMinus = (num) => {
             try {
-                // up arrow key moves the cell 16 spots
-                playerGreenCell.classList.remove(snakeColor);
-                //this allows us to save and update the index when the event happens
-                playerGreenCell = cellArray[randomGreenIndex -= num]; // randomGreenIndex = randomGreenIndex + 16
-                playerGreenCell.classList.add(snakeColor);
-                // Check if the current position is the "wall"
-                if (lastKeyPressed === null && randomGreenIndex === 240) {
-                    alert("i am on to something");
+                const newIndex = randomGreenIndex - num;
+                // Check if the new index is within the grid boundaries and not hitting the right wall
+                // when you divide by 16 all the left cells - num of the wall have a remainder of 15
+                // This checks to see if a new row has started
+                if (newIndex >= 0 && newIndex % 16 === 15) {
+                    location.reload()
+                } else {
+                    playerGreenCell.classList.remove(snakeColor);
+                    randomGreenIndex = newIndex;
+                    playerGreenCell = cellArray[randomGreenIndex];
+                    playerGreenCell.classList.add(snakeColor);
                 }
             } catch (e) {
-                catchError(e)
+                catchError(e);
             }
-        }
+        };
+
         const movePlayerPositive = (num) => {
             try {
-                // up arrow key moves the cell 16 spots
-                playerGreenCell.classList.remove(snakeColor);
-                //this allows us to save and update the index when the event happens
-                playerGreenCell = cellArray[randomGreenIndex += num]; // randomGreenIndex = randomGreenIndex + 16
-                playerGreenCell.classList.add(snakeColor);
+                const newIndex = randomGreenIndex + num;
+                // Check if the new index is within the grid boundaries and not hitting the left wall
+                // when you divide by 16 all the right cells + num of the wall have no remainder
+                // this checks to see if a new row has started
+                if (newIndex < cellArray.length && newIndex % 16 === 0) {
+                    alert("didnt work");
+                } else {
+                    playerGreenCell.classList.remove(snakeColor);
+                    randomGreenIndex = newIndex;
+                    playerGreenCell = cellArray[randomGreenIndex];
+                    playerGreenCell.classList.add(snakeColor);
+                }
+
             } catch (e) {
-                catchError(e)
+                catchError(e);
             }
-        }
+        };
+
         const startInterval = (moveFunction, num) => {
             interval = setInterval(() => {
                 moveFunction(num)
-            }, 500)
+            }, 300)
             isIntervalRunning = true
         }
         const stopInterval = () => {
@@ -124,40 +131,22 @@ const gameBoard = () => {
                 case "ArrowUp":
                 case "w":
                 case "W":
-                    if (isIntervalRunning) {
-                        stopInterval()
-                    } else {
-                        startInterval(movePlayerMinus, 16)
-                    }
+                    startInterval(movePlayerMinus, 16)
                     break;
                 case "ArrowDown":
                 case "s":
                 case "S":
-                    if (isIntervalRunning) {
-                        stopInterval()
-                    } else {
-                        startInterval(movePlayerPositive, 16)
-                    }
+                    startInterval(movePlayerPositive, 16)
                     break;
                 case "ArrowRight":
                 case "d":
                 case "D":
-                    if (isIntervalRunning) {
-                        stopInterval()
-                    } else {
-                        startInterval(movePlayerPositive, 1)
-                    }
+                    startInterval(movePlayerPositive, 1)
                     break;
                 case "ArrowLeft":
                 case "a":
                 case "A":
-                    if (isIntervalRunning) {
-                        stopInterval()
-
-                    } else {
-                        startInterval(movePlayerMinus, 1)
-                    }
-
+                    startInterval(movePlayerMinus, 1)
                     break;
                 default:
                     console.log("not working")
