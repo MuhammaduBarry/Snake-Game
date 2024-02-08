@@ -76,7 +76,7 @@ const gameBoard = () => {
                 location.reload()
             }
         }
-        let isIntervalRunning = false;
+        let movementInterval;
         const movePlayerMinus = (num) => {
             try {
                 const newIndex = randomGreenIndex - num;
@@ -103,7 +103,7 @@ const gameBoard = () => {
                 // when you divide by 16 all the right cells + num of the wall have no remainder
                 // this checks to see if a new row has started
                 if (newIndex < cellArray.length && newIndex % 16 === 0) {
-                    alert("didnt work");
+                    location.reload()
                 } else {
                     playerGreenCell.classList.remove(snakeColor);
                     randomGreenIndex = newIndex;
@@ -117,14 +117,14 @@ const gameBoard = () => {
         };
 
         const startInterval = (moveFunction, num) => {
-            interval = setInterval(() => {
+            movementInterval = setInterval(() => {
                 moveFunction(num)
             }, 300)
         }
-        const stopInterval = () => {
-            clearInterval(interval)
-        }
         document.addEventListener("keydown", (e) => {
+            if (movementInterval) {
+                clearInterval(movementInterval);
+            }
             switch (e.key) {
                 case "ArrowUp":
                 case "w":
