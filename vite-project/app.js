@@ -67,7 +67,7 @@ const gameBoard = () => {
     };
     // this function will keep track of our cells
     const trackMovement = () => {
-        let interval
+        let direction
         const catchError = (e) => {
             // cells that are places on the border
             if (e instanceof TypeError) {
@@ -115,12 +115,6 @@ const gameBoard = () => {
                 catchError(e);
             }
         };
-
-        const startInterval = (moveFunction, num) => {
-            movementInterval = setInterval(() => {
-                moveFunction(num)
-            }, 300)
-        }
         document.addEventListener("keydown", (e) => {
             if (movementInterval) {
                 clearInterval(movementInterval);
@@ -129,22 +123,22 @@ const gameBoard = () => {
                 case "ArrowUp":
                 case "w":
                 case "W":
-                    startInterval(movePlayerMinus, 16)
+                    movementInterval = setInterval(() => movePlayerMinus(16), 200)
                     break;
                 case "ArrowDown":
                 case "s":
                 case "S":
-                    startInterval(movePlayerPositive, 16)
+                    movementInterval = setInterval(() => movePlayerPositive(16), 200)
                     break;
                 case "ArrowRight":
                 case "d":
                 case "D":
-                    startInterval(movePlayerPositive, 1)
+                    movementInterval = setInterval(() => movePlayerPositive(1), 200)
                     break;
                 case "ArrowLeft":
                 case "a":
                 case "A":
-                    startInterval(movePlayerMinus, 1)
+                    movementInterval = setInterval(() => movePlayerMinus(1), 200)
                     break;
                 default:
                     console.log("not working")
