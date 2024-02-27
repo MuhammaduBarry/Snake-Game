@@ -11,10 +11,10 @@ export default {
                 '16-col': 'repeat(16, 1fr)'
             },
             width: {
-                '600-w': '600px'
+                '200': '200px'
             },
             height: {
-                '600-h': '600px'
+                '200': '200px'
             },
             colors: {
                 'snake-green': '#60A534',
